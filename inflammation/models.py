@@ -41,12 +41,12 @@ def load_json(filename):
 
 
 def daily_mean(data):
-    """Calculate the daily mean of a 2d inflammation data array."""
+    """Calculate the daily mean of a 2D inflammation data array."""
     return np.mean(data, axis=0)
 
 
 def daily_max(data):
-    """Calculate the daily max of a 2d inflammation data array."""
+    """Calculate the daily max of a 2D inflammation data array."""
     return np.max(data, axis=0)
 
 
