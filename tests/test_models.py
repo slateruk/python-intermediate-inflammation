@@ -101,6 +101,16 @@ def test_daily_min_string():
             ValueError,
         ),
         (
+            "test_input_string",
+            None,
+            TypeError,
+        ),
+        (
+            [-1, 2, 3],
+            None,
+            ValueError,
+        ),
+        (
             [[1, 2, 3], [4, 5, 6], [7, 8, 9]],
             [[0.33, 0.67, 1], [0.67, 0.83, 1], [0.78, 0.89, 1]],
             None,
