@@ -38,15 +38,13 @@ def load_json(filename):
         data_as_json = json.load(file)
         return [np.array(entry['observations']) for entry in data_as_json]
 
-
-
 def daily_mean(data):
-    """Calculate the daily mean of a 2d inflammation data array."""
+    """Calculate the daily mean of a 2D inflammation data array."""
     return np.mean(data, axis=0)
 
 
 def daily_max(data):
-    """Calculate the daily max of a 2d inflammation data array."""
+    """Calculate the daily max of a 2D inflammation data array."""
     return np.max(data, axis=0)
 
 
@@ -54,3 +52,25 @@ def daily_min(data):
     """Calculate the daily min of a 2d inflammation data array."""
     return np.min(data, axis=0)
 
+def patient_normalise(data):
+    """
+    Normalise patient data from a 2D inflammation data array.
+
+    NaN values are ignored, and normalised to 0.
+
+    Negative values are rounded to 0.
+    """
+    if np.any(data < 0):
+        raise ValueError('Inflammation values should not be negative')
+    if len(data.shape) != 2:
+        raise ValueError('inflammation array should be 2-dimensional')
+    if not isinstance(data, np.ndarray):
+        pass
+        # raise TypeError('Inflammation data should be a Numpy ndarray')
+
+    maxima = np.nanmax(data, axis=1)
+    with np.errstate(invalid='ignore', divide='ignore'):
+        normalised = data / maxima[:, np.newaxis]
+    normalised[np.isnan(normalised)] = 0
+    normalised[normalised < 0] = 0
+    return normalised
