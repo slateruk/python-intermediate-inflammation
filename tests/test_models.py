@@ -3,7 +3,7 @@
 import numpy as np
 import numpy.testing as npt
 import os
-
+import pytest
 
 def test_daily_mean_zeros():
     """Test that mean function works for an array of zeros."""
@@ -37,3 +37,14 @@ def test_load_from_json(tmpdir):
         temp_json_file.write('[{"observations":[1, 2, 3]},{"observations":[4, 5, 6]}]')
     result = load_json(example_path)
     npt.assert_array_equal(result, [[1, 2, 3], [4, 5, 6]])
+
+
+@pytest.mark.parametrize('data, expected_standard_deviation', [
+    ([0, 0, 0], 0.0),
+    ([1.0, 1.0, 1.0], 0),
+    ([0.0, 2.0], 1.0)
+])
+def test_daily_standard_deviation(data, expected_standard_deviation):
+    from inflammation.models import s_dev
+    result_data = s_dev(data)['standard deviation']
+    npt.assert_approx_equal(result_data, expected_standard_deviation)
