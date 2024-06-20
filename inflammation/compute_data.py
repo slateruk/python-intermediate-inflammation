@@ -8,6 +8,30 @@ import numpy as np
 from inflammation import models, views
 
 
+def load_data_from_path(data_dir):
+    data_file_paths = glob.glob(os.path.join(data_dir, 'inflammation*.csv'))
+    if len(data_file_paths) == 0:
+        raise ValueError(f"No inflammation csv's found in path {data_dir}")
+    data = map(models.load_csv, data_file_paths)
+
+    return data
+
+def compute_daily_standard_deviation(data):
+    means_by_day = map(models.daily_mean, data)
+    means_by_day_matrix = np.stack(list(means_by_day))
+
+    daily_standard_deviation = np.std(means_by_day_matrix, axis=0)
+
+    return daily_standard_deviation
+
+def graph_daily_standard_deviation(daily_standard_deviation):
+    graph_data = {
+        'standard deviation by day': daily_standard_deviation,
+    }
+    print(graph_data)
+    views.visualize(graph_data)
+
+
 def analyse_data(data_dir):
     """Calculate the standard deviation by day between datasets
 
@@ -28,4 +52,6 @@ def analyse_data(data_dir):
     graph_data = {
         'standard deviation by day': daily_standard_deviation,
     }
-    views.visualize(graph_data)
+    print(graph_data)
+    return graph_data
+    # views.visualize(graph_data)
